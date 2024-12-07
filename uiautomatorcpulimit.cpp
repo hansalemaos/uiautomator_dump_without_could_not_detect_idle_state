@@ -36,28 +36,7 @@ typedef struct proc_data
 
 namespace
 {
-template <typename T> std::ostream &operator<<(std::ostream &os, std::vector<T> &v)
-{
-    if (v.size() == 0)
-    {
-        os << "[]";
-        return os;
-    }
-    auto it{v.begin()};
 
-    os << '[';
-    while (it != v.end() - 1)
-    {
-        os << *it;
-        os << ", \n\n";
-
-        it++;
-    }
-    os << *it;
-    os << ']';
-
-    return os;
-}
 static constexpr std::string_view delim{"><node "};
 static constexpr std::string_view delim_csv{"\",\""};
 
@@ -121,43 +100,6 @@ static constexpr std::string_view csv_header{
     "area\",\"aa_width\",\"aa_height\",\"aa_start_x\",\"aa_start_y\",\"aa_end_x\",\"aa_end_y\",\"aa_is_square\",\"aa_w_"
     "h_relation\",\"checkable\",\"checked\",\"clickable\",\"enabled\",\"focusable\",\"focused\",\"index\",\"long_"
     "clickable\",\"password\",\"scrollable\",\"selected\",\"naf\""};
-
-// for debug
-std::ostream &operator<<(std::ostream &os, element_data &v)
-{
-    os << "ELEMENT:\n";
-    os << "bounds: " << v.bounds << "\n";
-    os << "text: " << v.text << "\n";
-    os << "package: " << v.package << "\n";
-    os << "resource_id: " << v.resource_id << "\n";
-    os << "clazz: " << v.clazz << "\n";
-    os << "content_desc: " << v.content_desc << "\n";
-    os << "aa_center_x: " << v.aa_center_x << "\n";
-    os << "aa_center_y: " << v.aa_center_y << "\n";
-    os << "aa_area: " << v.aa_area << "\n";
-    os << "aa_width: " << v.aa_width << "\n";
-    os << "aa_height: " << v.aa_height << "\n";
-    os << "aa_start_x: " << v.aa_start_x << "\n";
-    os << "aa_start_y: " << v.aa_start_y << "\n";
-    os << "aa_end_x: " << v.aa_end_x << "\n";
-    os << "aa_end_y: " << v.aa_end_y << "\n";
-    os << "aa_is_square: " << v.aa_is_square << "\n";
-    os << "aa_w_h_relation: " << v.aa_w_h_relation << "\n";
-    os << "checkable: " << v.checkable << "\n";
-    os << "checked: " << v.checked << "\n";
-    os << "clickable: " << v.clickable << "\n";
-    os << "enabled: " << v.enabled << "\n";
-    os << "focusable: " << v.focusable << "\n";
-    os << "focused: " << v.focused << "\n";
-    os << "index: " << v.index << "\n";
-    os << "long_clickable: " << v.long_clickable << "\n";
-    os << "password: " << v.password << "\n";
-    os << "scrollable: " << v.scrollable << "\n";
-    os << "selected: " << v.selected << "\n";
-    os << "naf: " << v.naf << "\n\n";
-
-    return os;
-}
 
 static constexpr std::string_view bool_true{"true"};
 static constexpr std::string_view bool_true1{"true\""};
@@ -543,17 +485,6 @@ int parse_window_dump_xml()
     std::cout << csv_data_outout;
     return 0;
 }
-// for debug
-std::ostream &operator<<(std::ostream &os, proc_data &v)
-{
-    os << "STDOUT:\n";
-    os << v.std_out << "\n";
-    os << "PID:\n";
-    os << v.pid << "\n\n";
-    os << "EXIT CODE:\n";
-    os << v.exit_code << "\n\n";
-    return os;
-}
 
 pid_t system2(const char *command, int *infp, int *outfp)
 {
@@ -750,8 +681,8 @@ int main(int argc, char *argv[])
     int pid_from_top_activity{get_pid_from_top_activity()};
     std::string pid_of_cpulimit_string{cpu_limit_pid(pid_from_top_activity, limit_top_activity_to, true)};
     // system("nice --adjustment=-20 /system/bin/uiautomator dump");
-    system(nicecmd.c_str());
-    parse_window_dump_xml();
+    auto _1 = system(nicecmd.c_str());
+    auto _2 = parse_window_dump_xml();
     std::string killchars{"kill"};
     char *args[] = {(char *)killchars.c_str(), (char *)pid_of_cpulimit_string.c_str(), NULL};
     execvp("kill", args);
