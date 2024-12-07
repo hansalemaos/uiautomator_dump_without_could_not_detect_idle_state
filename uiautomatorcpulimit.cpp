@@ -656,6 +656,7 @@ void sleep_ms(int milliseconds)
 int main(int argc, char *argv[])
 {
     int limit_top_activity_to{1};
+    std::string nicecmd;
     if (argc > 1)
     {
         limit_top_activity_to = std::stoi(argv[1]);
@@ -665,19 +666,25 @@ int main(int argc, char *argv[])
         limit_top_activity_to = 100;
     }
     int priority{0};
+
     if (argc > 2)
     {
         priority = std::stoi(argv[2]);
+
+        if (priority < 0)
+        {
+            priority = ::abs(priority);
+        }
+        if (priority > 19)
+        {
+            priority = 19;
+        }
+        nicecmd = "nice -n-" + std::to_string(priority) + " /system/bin/uiautomator dump";
     }
-    if (priority < 0)
+    else
     {
-        priority = ::abs(priority);
+        nicecmd = "/system/bin/uiautomator dump";
     }
-    if (priority > 19)
-    {
-        priority = 19;
-    }
-    std::string nicecmd{"nice -n-" + std::to_string(priority) + " /system/bin/uiautomator dump"};
     int pid_from_top_activity{get_pid_from_top_activity()};
     std::string pid_of_cpulimit_string{cpu_limit_pid(pid_from_top_activity, limit_top_activity_to, true)};
     auto _1 = system(nicecmd.c_str());
