@@ -677,10 +677,9 @@ int main(int argc, char *argv[])
     {
         priority = 19;
     }
-    std::string nicecmd{"nice --" + std::to_string(priority) + " /system/bin/uiautomator dump"};
+    std::string nicecmd{"nice -n-" + std::to_string(priority) + " /system/bin/uiautomator dump"};
     int pid_from_top_activity{get_pid_from_top_activity()};
     std::string pid_of_cpulimit_string{cpu_limit_pid(pid_from_top_activity, limit_top_activity_to, true)};
-    // system("nice --adjustment=-20 /system/bin/uiautomator dump");
     auto _1 = system(nicecmd.c_str());
     auto _2 = parse_window_dump_xml();
     std::string killchars{"kill"};
