@@ -45,6 +45,11 @@ rm -f /sdcard/window_dump.xml
 # The secong argument the the priority of uiautomator 0 (normal) until 19 (max)
 
 ./uiautomatorcpulimitexe 5 18
+
+# If you are getting an error message that something is wrong with nice, use it without the second argument:
+
+./uiautomatorcpulimitexe 5
+
 ```
 
 
