@@ -133,9 +133,13 @@ int static constexpr return_bool_as_int(std::string_view s)
 
 void static replace_space_with_new_line(std::string &haystack)
 {
-    for (const auto &tag : split_at_strings_strings_only_no_index)
+    for (const std::string_view &tag : split_at_strings_strings_only_no_index)
     {
-        std::replace(haystack.begin(), haystack.end(), tag[0], '\n');
+        size_t indi{haystack.find(tag)};
+        if (indi != std::string::npos)
+        {
+            haystack[indi] = '\n';
+        }
     }
 }
 
@@ -230,7 +234,7 @@ void static parse_results(const std::string_view s, element_data &e)
             else if ((indexofstring == 0) && (*it == sv_content_desc))
             {
                 e.content_desc = r.substr(it->size(), r.size() - it->size());
-                if (e.content_desc.back() == '"')
+                if (!e.content_desc.empty() && e.content_desc.back() == '"')
                 {
                     e.content_desc.pop_back();
                 }
@@ -278,7 +282,7 @@ void static parse_results(const std::string_view s, element_data &e)
             else if ((indexofstring == 0) && (*it == sv_text))
             {
                 e.text = r.substr(it->size(), r.size() - it->size());
-                if (e.text.back() == '"')
+                if (!e.text.empty() && e.text.back() == '"')
                 {
                     e.text.pop_back();
                 }
