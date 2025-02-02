@@ -487,6 +487,10 @@ int parse_window_dump_xml()
     std::vector<element_data> parsed_elements{uiautomator_dumper::parse_uiautomator_dump(dumpstring)};
     std::string csv_data_outout{uiautomator_dumper::dump_struct_vector_as_csv(parsed_elements)};
     std::cout << csv_data_outout;
+    std::cout << std::endl;
+    std::cout << std::endl;
+    std::cout << std::endl;
+    std::cout << std::endl;
     return 0;
 }
 
